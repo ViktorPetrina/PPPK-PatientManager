@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace PatientManager.Migrations
+namespace DataLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class Migration2 : Migration
+    public partial class Perescriptions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

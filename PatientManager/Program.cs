@@ -1,7 +1,18 @@
+using DataLayer.Models;
+using DataLayer.Repository;
+using Microsoft.EntityFrameworkCore;
+using PatientManager.AutoMapper;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<PatientManagerContext>(options => {
+    options.UseNpgsql("name=ConnectionStrings:connection");
+});
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
