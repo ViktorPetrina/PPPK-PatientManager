@@ -16,11 +16,13 @@ namespace PatientManager.Controllers
         private const string EXISTING_OIB_ERROR = "Patient with the same OIB already exists.";
 
         private readonly IRepository<Patient> _patientRepo;
+        private readonly IRepository<Diagnosis> _diagnosisRepo;
         private readonly IMapper _mapper;
 
         public PatientController(IMapper mapper)
         {
             _patientRepo = RepositoryFactory.CreateRepository<Patient>();
+            _diagnosisRepo = RepositoryFactory.CreateRepository<Diagnosis>();
             _mapper = mapper;
         }
 
@@ -47,6 +49,15 @@ namespace PatientManager.Controllers
             ViewBag.PatientName = patient.FirstName + " " + patient.LastName;
 
             return View(medicalHistory);
+        }
+
+        public ActionResult DiagnosisFinished(int id)
+        {
+            var diagnosis = _diagnosisRepo.Get(id);
+            diagnosis.End = DateOnly.FromDateTime(DateTime.Now);
+            _diagnosisRepo.Update(id, diagnosis);
+
+            return RedirectToAction(nameof(MedicalHistory), new { diagnosis.Patient.Id } );
         }
 
         public ActionResult Create()

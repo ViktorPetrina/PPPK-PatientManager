@@ -26,6 +26,8 @@ namespace DataLayer.Models
         public DateOnly? End { get; set; }
 
         [ForeignKey("patient_id")]
-        public Patient Patient { get; set; }
+        public long PatientId { get; set; }
+
+        public Patient? Patient { get; set; }
     }
 }

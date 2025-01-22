@@ -4,17 +4,14 @@
     ViewData["Title"] = "MedicalHistory";
 }
 
-<h1>@ViewBag.Name medical history</h1>
+<h1>@ViewBag.PatientName medical history</h1>
 
 <p>
-    <a asp-action="Create">New diagnosis</a>
+    @Html.ActionLink("Add diagnosis", "Create", "Diagnosis", new {Model.First().Patient.Id}, new {@class = "btn btn-primary"})
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -31,21 +28,26 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Start)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.End)
+                @if (item.End == null) {
+                    <p>Ongoing</p>
+                }
+                else {
+                    @Html.DisplayFor(modelItem => item.End) 
+                }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @if (item.End == null) {
+                    @Html.ActionLink("Mark finished", "DiagnosisFinished", new { id = item.Id }, new { @class = "btn btn-outline-primary" })
+                }
+                else {
+                    <button class="btn btn-outline-primary">Is finished</button>
+                }
             </td>
         </tr>
 }
