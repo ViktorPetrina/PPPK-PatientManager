@@ -16,15 +16,16 @@ namespace DataLayer.Models
         public long Id { get; set; }
 
         [Column("name")]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [Column("start")]
+        [Display(Name = "Beggining")]
         public DateOnly Start { get; set; }
 
         [Column("end")]
-        public DateOnly End { get; set; }
+        public DateOnly? End { get; set; }
 
         [ForeignKey("patient_id")]
-        public Patient? Patient { get; set; }
+        public Patient Patient { get; set; }
     }
 }
