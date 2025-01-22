@@ -25,7 +25,7 @@ namespace PatientManager.Controllers
         public ActionResult Create(int id)
         {
             var diagnosis = new Diagnosis();
-            diagnosis.Patient = _patientRepo.Get(id);
+            diagnosis.PatientId = id;
             diagnosis.Start = DateOnly.FromDateTime(DateTime.Now);
 
             return View(diagnosis);
@@ -37,7 +37,7 @@ namespace PatientManager.Controllers
         {
             try
             {
-                diagnosis.Patient = _patientRepo.Get(diagnosis.Patient.Id);
+                diagnosis.Patient = _patientRepo.Get(diagnosis.PatientId);
                 _diagnosisRepo.Add(diagnosis);
 
                 return RedirectToAction("MedicalHistory", "Patient", new { diagnosis.Patient.Id });

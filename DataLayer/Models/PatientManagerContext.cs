@@ -49,32 +49,32 @@ namespace DataLayer.Models
                 entity.HasOne(e => e.Type);
             }); 
 
-            modelBuilder.Entity<ExaminationType>(entity =>
-            {
-                entity.HasData(
-                    ExaminationType.GP,
-                    ExaminationType.KRV,
-                    ExaminationType.XRAY,
-                    ExaminationType.CT,
-                    ExaminationType.MR,
-                    ExaminationType.ULTRA,
-                    ExaminationType.ECG,
-                    ExaminationType.ECHO,
-                    ExaminationType.EYE,
-                    ExaminationType.DERM,
-                    ExaminationType.DENTA,
-                    ExaminationType.MAMMO,
-                    ExaminationType.NEURO
-                );
-            });
+            //modelBuilder.Entity<ExaminationType>(entity =>
+            //{
+            //    entity.HasData(
+            //        ExaminationType.GP,
+            //        ExaminationType.KRV,
+            //        ExaminationType.XRAY,
+            //        ExaminationType.CT,
+            //        ExaminationType.MR,
+            //        ExaminationType.ULTRA,
+            //        ExaminationType.ECG,
+            //        ExaminationType.ECHO,
+            //        ExaminationType.EYE,
+            //        ExaminationType.DERM,
+            //        ExaminationType.DENTA,
+            //        ExaminationType.MAMMO,
+            //        ExaminationType.NEURO
+            //    );
+            //});
 
-            modelBuilder.Entity<Gender>(entity =>
-            {
-                entity.HasData(
-                    Gender.Male,
-                    Gender.Female
-                );
-            });
+            //modelBuilder.Entity<Gender>(entity =>
+            //{
+            //    entity.HasData(
+            //        Gender.Male,
+            //        Gender.Female
+            //    );
+            //});
 
             base.OnModelCreating(modelBuilder);
         }

@@ -105,86 +105,6 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ExaminationTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Code = "GP",
-                            Name = "General physical exam"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Code = "KRV",
-                            Name = "Blood test"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Code = "X-RAY",
-                            Name = "X-ray scan"
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            Code = "CT",
-                            Name = "CT scan"
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            Code = "MR",
-                            Name = "MRI scan"
-                        },
-                        new
-                        {
-                            Id = 6L,
-                            Code = "ULTRA",
-                            Name = "Ultrasound"
-                        },
-                        new
-                        {
-                            Id = 7L,
-                            Code = "EKG",
-                            Name = "Electrocardiogram"
-                        },
-                        new
-                        {
-                            Id = 8L,
-                            Code = "ECHO",
-                            Name = "Echocardiogram"
-                        },
-                        new
-                        {
-                            Id = 9L,
-                            Code = "EYE",
-                            Name = "Eye exam"
-                        },
-                        new
-                        {
-                            Id = 10L,
-                            Code = "DERM",
-                            Name = "Dermatology exam"
-                        },
-                        new
-                        {
-                            Id = 11L,
-                            Code = "DENTA",
-                            Name = "Dental exam"
-                        },
-                        new
-                        {
-                            Id = 12L,
-                            Code = "MAMMO",
-                            Name = "Mammogram"
-                        },
-                        new
-                        {
-                            Id = 13L,
-                            Code = "NEURO",
-                            Name = "Neurology exam"
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.Models.Gender", b =>
@@ -203,18 +123,6 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Gender");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Sex = 'M'
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Sex = 'F'
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.Models.Patient", b =>
@@ -243,12 +151,12 @@ namespace DataLayer.Migrations
                         .HasColumnType("character varying(11)")
                         .HasColumnName("oib");
 
-                    b.Property<long?>("sex_id")
+                    b.Property<long>("SexId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("sex_id");
+                    b.HasIndex("SexId");
 
                     b.ToTable("Patients");
                 });
@@ -305,7 +213,9 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DataLayer.Models.Gender", "Sex")
                         .WithMany()
-                        .HasForeignKey("sex_id");
+                        .HasForeignKey("SexId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Sex");
                 });
