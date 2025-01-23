@@ -19,6 +19,7 @@ namespace DataLayer.Models
 
         [ForeignKey("Patient")]
         [Column("patient_id")]
+        [Display(Name = "Patient")]
         public long PatientId { get; set; }
 
         public Patient? Patient { get; set; }

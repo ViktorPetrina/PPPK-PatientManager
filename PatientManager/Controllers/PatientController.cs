@@ -47,6 +47,17 @@ namespace PatientManager.Controllers
             return View(patientVm);
         }
 
+        public ActionResult Examinations(long id)
+        {
+            var patient = _patientRepo.Get(id);
+
+            var examinatios = patient.Examinations;
+            ViewBag.PatientName = patient.FirstName + " " + patient.LastName;
+            ViewBag.PatientId = id;
+
+            return View(examinatios);
+        }
+
         public ActionResult MedicalHistory(long id)
         {
             var patient = _patientRepo.Get(id);

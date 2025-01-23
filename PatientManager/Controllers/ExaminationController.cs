@@ -3,6 +3,7 @@ using DataLayer.Models;
 using DataLayer.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using PatientManager.Utilities;
 
 namespace PatientManager.Controllers
@@ -28,12 +29,17 @@ namespace PatientManager.Controllers
 
         public ActionResult Details(int id)
         {
-            return View();
+            var examination = _examinationRepo.Get(id);
+
+            // serialize the image and display somehow
+
+            return View(examination);
         }
 
         public ActionResult Create()
         {
             ViewBag.ExaminationTypeListItems = ViewUtils.GetExaminationTypeListItems();
+            ViewBag.PatientListItems = ViewUtils.GetPatientListItems(_patientRepo);
 
             var examination = new Examination();
             examination.Date = DateTime.Now;
@@ -43,11 +49,22 @@ namespace PatientManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Examination examination)
+        public ActionResult Create(Examination examination, IFormFile imageFile)
         {
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    imageFile.CopyTo(memoryStream);
+                    examination.Image = memoryStream.ToArray();
+                }
+            }
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                _examinationRepo.Add(examination);
+
+                return RedirectToAction("Index", "Patient");
             }
             catch
             {
@@ -63,25 +80,6 @@ namespace PatientManager.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {

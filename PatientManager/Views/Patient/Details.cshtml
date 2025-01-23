@@ -49,7 +49,7 @@
 <div>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary"} ) |
     @Html.ActionLink("Medical history", "MedicalHistory", new { id = Model.Id }, new { @class = "btn btn-outline-primary" }) |
-    @Html.ActionLink("Examinations", "Index", "Examination", new { id = Model.Id }, new { @class = "btn btn-outline-primary" }) |
+    @Html.ActionLink("Examinations", "Examinations", new { id = Model.Id }, new { @class = "btn btn-outline-primary" }) |
     @Html.ActionLink("Perescriptions", "Index", "Perescription", new { id = Model.Id }, new { @class = "btn btn-outline-primary" }) |
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

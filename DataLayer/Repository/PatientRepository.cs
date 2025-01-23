@@ -39,9 +39,10 @@ namespace DataLayer.Repository
         public Patient Get(long id)
         {
             var patient = _context.Patients?
-                .Include(p => p.Examinations)
                 .Include(p => p.Sex)
                 .Include(p => p.MedicalHistory)
+                .Include(p => p.Examinations)
+                .ThenInclude(e => e.Type)
                 .FirstOrDefault(p => p.Id == id);
 
             if (patient == null)
