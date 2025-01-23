@@ -7,7 +7,7 @@
 <h1>@ViewBag.PatientName medical history</h1>
 
 <p>
-    @Html.ActionLink("Add diagnosis", "Create", "Diagnosis", new {Model.First().Patient.Id}, new {@class = "btn btn-primary"})
+    @Html.ActionLink("Add diagnosis", "Create", "Diagnosis", new { id = ViewBag.PatientId }, new { @class = "btn btn-primary" })
 </p>
 <table class="table">
     <thead>

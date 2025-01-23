@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace DataLayer.Models
 {
@@ -22,7 +23,8 @@ namespace DataLayer.Models
         [Required]
         public DateTime Date { get; set; }
 
-        [ForeignKey("type_id")]
+        [ForeignKey("ExaminationType")]
+        [Column("type_id")]
         public ExaminationType? Type { get; set; }
 
         public byte[]? Image { get; set; }

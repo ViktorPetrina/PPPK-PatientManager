@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(PatientManagerContext))]
-    [Migration("20250122123501_NullableFix")]
-    partial class NullableFix
+    [Migration("20250123124447_ForeignKeyFix")]
+    partial class ForeignKeyFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,16 +43,17 @@ namespace DataLayer.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
+                    b.Property<long>("PatientId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("patient_id");
+
                     b.Property<DateOnly>("Start")
                         .HasColumnType("date")
                         .HasColumnName("start");
 
-                    b.Property<long>("patient_id")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("patient_id");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Diagnoses");
                 });
@@ -70,20 +71,20 @@ namespace DataLayer.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date");
 
+                    b.Property<long?>("ExaminationType")
+                        .HasColumnType("bigint");
+
                     b.Property<byte[]>("Image")
                         .HasColumnType("bytea");
 
                     b.Property<long?>("patient_id")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("type_id")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("patient_id");
+                    b.HasIndex("ExaminationType");
 
-                    b.HasIndex("type_id");
+                    b.HasIndex("patient_id");
 
                     b.ToTable("Examinations");
                 });
@@ -246,12 +247,13 @@ namespace DataLayer.Migrations
                         .HasColumnType("character varying(11)")
                         .HasColumnName("oib");
 
-                    b.Property<long?>("sex_id")
-                        .HasColumnType("bigint");
+                    b.Property<long>("SexId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("sex_id");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("sex_id");
+                    b.HasIndex("SexId");
 
                     b.ToTable("Patients");
                 });
@@ -282,7 +284,7 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DataLayer.Models.Patient", "Patient")
                         .WithMany("MedicalHistory")
-                        .HasForeignKey("patient_id")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -291,13 +293,13 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Models.Examination", b =>
                 {
+                    b.HasOne("DataLayer.Models.ExaminationType", "Type")
+                        .WithMany()
+                        .HasForeignKey("ExaminationType");
+
                     b.HasOne("DataLayer.Models.Patient", "Patient")
                         .WithMany("Examinations")
                         .HasForeignKey("patient_id");
-
-                    b.HasOne("DataLayer.Models.ExaminationType", "Type")
-                        .WithMany()
-                        .HasForeignKey("type_id");
 
                     b.Navigation("Patient");
 
@@ -308,7 +310,9 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DataLayer.Models.Gender", "Sex")
                         .WithMany()
-                        .HasForeignKey("sex_id");
+                        .HasForeignKey("SexId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Sex");
                 });

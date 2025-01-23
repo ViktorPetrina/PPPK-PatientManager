@@ -22,7 +22,8 @@ namespace DataLayer.Models
         [Column("last_name")]
         public string? LastName { get; set; }
 
-        [ForeignKey("sex_id")]
+        [ForeignKey("Gender")]
+        [Column("sex_id")]
         public long SexId { get; set; }
 
         public Gender? Sex { get; set; }
@@ -36,7 +37,7 @@ namespace DataLayer.Models
 
         public IEnumerable<Examination>? Examinations { get; set; }
 
-        public IEnumerable<Diagnosis>? MedicalHistory { get; set; }
+        public List<Diagnosis>? MedicalHistory { get; set; }
     }
 
     public class Gender

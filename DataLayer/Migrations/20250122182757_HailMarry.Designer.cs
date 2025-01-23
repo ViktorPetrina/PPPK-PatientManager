@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(PatientManagerContext))]
-    [Migration("20250121180903_ExaminationTypeConstants")]
-    partial class ExaminationTypeConstants
+    [Migration("20250122182757_HailMarry")]
+    partial class HailMarry
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,24 +34,25 @@ namespace DataLayer.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateOnly>("End")
+                    b.Property<DateOnly?>("End")
                         .HasColumnType("date")
                         .HasColumnName("end");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<long>("PatientId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateOnly>("Start")
                         .HasColumnType("date")
                         .HasColumnName("start");
 
-                    b.Property<long?>("patient_id")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("patient_id");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Diagnoses");
                 });
@@ -205,6 +206,18 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Gender");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Sex = 'M'
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Sex = 'F'
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Models.Patient", b =>
@@ -269,7 +282,9 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DataLayer.Models.Patient", "Patient")
                         .WithMany("MedicalHistory")
-                        .HasForeignKey("patient_id");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Patient");
                 });

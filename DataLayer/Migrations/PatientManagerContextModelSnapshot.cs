@@ -41,7 +41,8 @@ namespace DataLayer.Migrations
                         .HasColumnName("name");
 
                     b.Property<long>("PatientId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("patient_id");
 
                     b.Property<DateOnly>("Start")
                         .HasColumnType("date")
@@ -67,20 +68,20 @@ namespace DataLayer.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date");
 
+                    b.Property<long?>("ExaminationType")
+                        .HasColumnType("bigint");
+
                     b.Property<byte[]>("Image")
                         .HasColumnType("bytea");
 
                     b.Property<long?>("patient_id")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("type_id")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("patient_id");
+                    b.HasIndex("ExaminationType");
 
-                    b.HasIndex("type_id");
+                    b.HasIndex("patient_id");
 
                     b.ToTable("Examinations");
                 });
@@ -105,6 +106,86 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ExaminationTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Code = "GP",
+                            Name = "General physical exam"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Code = "KRV",
+                            Name = "Blood test"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Code = "X-RAY",
+                            Name = "X-ray scan"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Code = "CT",
+                            Name = "CT scan"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Code = "MR",
+                            Name = "MRI scan"
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            Code = "ULTRA",
+                            Name = "Ultrasound"
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            Code = "EKG",
+                            Name = "Electrocardiogram"
+                        },
+                        new
+                        {
+                            Id = 8L,
+                            Code = "ECHO",
+                            Name = "Echocardiogram"
+                        },
+                        new
+                        {
+                            Id = 9L,
+                            Code = "EYE",
+                            Name = "Eye exam"
+                        },
+                        new
+                        {
+                            Id = 10L,
+                            Code = "DERM",
+                            Name = "Dermatology exam"
+                        },
+                        new
+                        {
+                            Id = 11L,
+                            Code = "DENTA",
+                            Name = "Dental exam"
+                        },
+                        new
+                        {
+                            Id = 12L,
+                            Code = "MAMMO",
+                            Name = "Mammogram"
+                        },
+                        new
+                        {
+                            Id = 13L,
+                            Code = "NEURO",
+                            Name = "Neurology exam"
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Models.Gender", b =>
@@ -123,6 +204,18 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Gender");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Sex = 'M'
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Sex = 'F'
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Models.Patient", b =>
@@ -152,7 +245,8 @@ namespace DataLayer.Migrations
                         .HasColumnName("oib");
 
                     b.Property<long>("SexId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("sex_id");
 
                     b.HasKey("Id");
 
@@ -196,13 +290,13 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Models.Examination", b =>
                 {
+                    b.HasOne("DataLayer.Models.ExaminationType", "Type")
+                        .WithMany()
+                        .HasForeignKey("ExaminationType");
+
                     b.HasOne("DataLayer.Models.Patient", "Patient")
                         .WithMany("Examinations")
                         .HasForeignKey("patient_id");
-
-                    b.HasOne("DataLayer.Models.ExaminationType", "Type")
-                        .WithMany()
-                        .HasForeignKey("type_id");
 
                     b.Navigation("Patient");
 

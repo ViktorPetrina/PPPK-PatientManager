@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(PatientManagerContext))]
-    [Migration("20250121174709_FirstDatabase")]
-    partial class FirstDatabase
+    [Migration("20250123122617_PatientSexId")]
+    partial class PatientSexId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,24 +34,25 @@ namespace DataLayer.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateOnly>("End")
+                    b.Property<DateOnly?>("End")
                         .HasColumnType("date")
                         .HasColumnName("end");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<long>("PatientId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateOnly>("Start")
                         .HasColumnType("date")
                         .HasColumnName("start");
 
-                    b.Property<long?>("patient_id")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("patient_id");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Diagnoses");
                 });
@@ -107,6 +108,86 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ExaminationTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Code = "GP",
+                            Name = "General physical exam"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Code = "KRV",
+                            Name = "Blood test"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Code = "X-RAY",
+                            Name = "X-ray scan"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Code = "CT",
+                            Name = "CT scan"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Code = "MR",
+                            Name = "MRI scan"
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            Code = "ULTRA",
+                            Name = "Ultrasound"
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            Code = "EKG",
+                            Name = "Electrocardiogram"
+                        },
+                        new
+                        {
+                            Id = 8L,
+                            Code = "ECHO",
+                            Name = "Echocardiogram"
+                        },
+                        new
+                        {
+                            Id = 9L,
+                            Code = "EYE",
+                            Name = "Eye exam"
+                        },
+                        new
+                        {
+                            Id = 10L,
+                            Code = "DERM",
+                            Name = "Dermatology exam"
+                        },
+                        new
+                        {
+                            Id = 11L,
+                            Code = "DENTA",
+                            Name = "Dental exam"
+                        },
+                        new
+                        {
+                            Id = 12L,
+                            Code = "MAMMO",
+                            Name = "Mammogram"
+                        },
+                        new
+                        {
+                            Id = 13L,
+                            Code = "NEURO",
+                            Name = "Neurology exam"
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Models.Gender", b =>
@@ -125,6 +206,18 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Gender");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Sex = 'M'
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Sex = 'F'
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Models.Patient", b =>
@@ -153,21 +246,45 @@ namespace DataLayer.Migrations
                         .HasColumnType("character varying(11)")
                         .HasColumnName("oib");
 
-                    b.Property<long?>("sex_id")
+                    b.Property<long>("SexId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("sex_id");
+                    b.HasIndex("SexId");
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("DataLayer.Models.Perescription", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Perescriptions");
                 });
 
             modelBuilder.Entity("DataLayer.Models.Diagnosis", b =>
                 {
                     b.HasOne("DataLayer.Models.Patient", "Patient")
                         .WithMany("MedicalHistory")
-                        .HasForeignKey("patient_id");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Patient");
                 });
@@ -191,7 +308,9 @@ namespace DataLayer.Migrations
                 {
                     b.HasOne("DataLayer.Models.Gender", "Sex")
                         .WithMany()
-                        .HasForeignKey("sex_id");
+                        .HasForeignKey("SexId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Sex");
                 });

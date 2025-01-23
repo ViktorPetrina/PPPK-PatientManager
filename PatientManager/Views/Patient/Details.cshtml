@@ -22,10 +22,15 @@
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Sex.Sex)
+            @Html.DisplayNameFor(model => model.Sex)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Sex.Sex)
+            @if (Model.SexId == 1) {
+                <p>Male</p>
+            }
+            else {
+                <p>Female</p>
+            }
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateOfBirth)
