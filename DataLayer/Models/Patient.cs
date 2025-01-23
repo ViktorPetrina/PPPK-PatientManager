@@ -22,7 +22,10 @@ namespace DataLayer.Models
         [Column("last_name")]
         public string? LastName { get; set; }
 
-        [ForeignKey("sex_id")]
+        [ForeignKey("Gender")]
+        [Column("sex_id")]
+        public long SexId { get; set; }
+
         public Gender? Sex { get; set; }
 
         [Column("date_of_birth")]

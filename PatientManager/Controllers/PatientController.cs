@@ -84,7 +84,7 @@ namespace PatientManager.Controllers
                 CheckOib(patientVm);
 
                 var patient = _mapper.Map<Patient>(patientVm);
-                patient.
+                
                 _patientRepo.Add(patient);
 
                 return RedirectToAction(nameof(Index));

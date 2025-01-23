@@ -19,6 +19,7 @@ namespace PatientManager.ViewModels
         [Required(ErrorMessage = "Gender is required")]
         public long SexId { get; set; }
 
+        [Display(Name = "Gender")]
         public Gender? Sex { get; set; }
 
         [Display(Name = "Date of birth")]

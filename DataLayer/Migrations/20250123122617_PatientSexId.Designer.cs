@@ -3,6 +3,7 @@ using System;
 using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(PatientManagerContext))]
-    partial class PatientManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20250123122617_PatientSexId")]
+    partial class PatientSexId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,8 +44,7 @@ namespace DataLayer.Migrations
                         .HasColumnName("name");
 
                     b.Property<long>("PatientId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("patient_id");
+                        .HasColumnType("bigint");
 
                     b.Property<DateOnly>("Start")
                         .HasColumnType("date")
@@ -68,20 +70,20 @@ namespace DataLayer.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date");
 
-                    b.Property<long?>("ExaminationType")
-                        .HasColumnType("bigint");
-
                     b.Property<byte[]>("Image")
                         .HasColumnType("bytea");
 
                     b.Property<long?>("patient_id")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("type_id")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ExaminationType");
-
                     b.HasIndex("patient_id");
+
+                    b.HasIndex("type_id");
 
                     b.ToTable("Examinations");
                 });
@@ -245,8 +247,7 @@ namespace DataLayer.Migrations
                         .HasColumnName("oib");
 
                     b.Property<long>("SexId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("sex_id");
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -290,13 +291,13 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Models.Examination", b =>
                 {
-                    b.HasOne("DataLayer.Models.ExaminationType", "Type")
-                        .WithMany()
-                        .HasForeignKey("ExaminationType");
-
                     b.HasOne("DataLayer.Models.Patient", "Patient")
                         .WithMany("Examinations")
                         .HasForeignKey("patient_id");
+
+                    b.HasOne("DataLayer.Models.ExaminationType", "Type")
+                        .WithMany()
+                        .HasForeignKey("type_id");
 
                     b.Navigation("Patient");
 

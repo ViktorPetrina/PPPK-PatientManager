@@ -64,6 +64,7 @@ namespace DataLayer.Repository
             patient.FirstName = entity.FirstName;
             patient.LastName = entity.LastName;
             patient.DateOfBirth = entity.DateOfBirth;
+            patient.SexId = entity.SexId;
             patient.Oib = entity.Oib;
             patient.Examinations = entity.Examinations;
             patient.MedicalHistory = entity.MedicalHistory;
