@@ -15,6 +15,7 @@ builder.Services.AddDbContext<PatientManagerContext>(options => {
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<IRepository<Patient>, PatientRepository>();
+builder.Services.AddScoped<IRepository<Examination>, ExaminationRepository>();
 builder.Services.AddScoped<IRepository<Diagnosis>, DiagnosisRepository>();
 
 var app = builder.Build();

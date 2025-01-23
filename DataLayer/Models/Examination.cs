@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace DataLayer.Models
 {
@@ -28,6 +29,8 @@ namespace DataLayer.Models
 
         [ForeignKey("ExaminationType")]
         [Column("type_id")]
+        public long TypeId { get; set; }
+
         public ExaminationType? Type { get; set; }
 
         public byte[]? Image { get; set; }
@@ -53,6 +56,18 @@ namespace DataLayer.Models
         }
 
         public ExaminationType() { }
+
+        public static IEnumerable<ExaminationType> GetAll()
+        {
+#pragma warning disable CS8619
+#pragma warning disable CS8600 
+            return typeof(ExaminationType)
+                .GetFields(BindingFlags.Public | BindingFlags.Static)
+                .Where(f => f.FieldType == typeof(ExaminationType))
+                .Select(f => (ExaminationType)f.GetValue(null));
+#pragma warning restore CS8600 
+#pragma warning restore CS8619
+        }
 
         public static readonly ExaminationType GP = new ExaminationType(1, "General physical exam", "GP");
         public static readonly ExaminationType KRV = new ExaminationType(2, "Blood test", "KRV");

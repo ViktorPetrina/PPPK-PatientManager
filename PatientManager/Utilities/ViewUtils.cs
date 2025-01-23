@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models;
+using DataLayer.Repository;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PatientManager.Utilities
@@ -22,9 +23,24 @@ namespace PatientManager.Utilities
             };
         }
 
+        public static IEnumerable<SelectListItem> GetPatientListItems(IRepository<Patient> repo)
+        {
+            return repo.GetAll().ToList().Select(p => new SelectListItem 
+            {
+                Text = p.FirstName + " " + p.LastName,
+                Value = p.Id.ToString()
+            });
+        }
+
         public static IEnumerable<SelectListItem> GetExaminationTypeListItems() 
         {
-            throw new NotImplementedException();
+            IEnumerable<ExaminationType> types = ExaminationType.GetAll();
+
+            return types.ToList().Select(t => new SelectListItem
+            {
+                Text = t.Name,
+                Value = t.Id.ToString()
+            });
         }
     }
 }
