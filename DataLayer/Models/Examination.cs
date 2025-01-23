@@ -16,7 +16,10 @@ namespace DataLayer.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [ForeignKey("patient_id")]
+        [ForeignKey("Patient")]
+        [Column("patient_id")]
+        public long PatientId { get; set; }
+
         public Patient? Patient { get; set; }
 
         [Column("date")]
