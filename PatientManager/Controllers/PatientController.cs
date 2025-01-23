@@ -3,6 +3,8 @@ using DataLayer.Models;
 using DataLayer.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using PatientManager.Utilities;
 using PatientManager.ViewModels;
 
 // TODO:
@@ -19,10 +21,14 @@ namespace PatientManager.Controllers
         private readonly IRepository<Diagnosis> _diagnosisRepo;
         private readonly IMapper _mapper;
 
-        public PatientController(IMapper mapper)
+        public PatientController(IMapper mapper, IRepository<Patient> patientRepo, IRepository<Diagnosis> diagnosisRepo)
         {
-            _patientRepo = RepositoryFactory.CreateRepository<Patient>();
-            _diagnosisRepo = RepositoryFactory.CreateRepository<Diagnosis>();
+            //_patientRepo = RepositoryFactory.CreateRepository<Patient>();
+            //_diagnosisRepo = RepositoryFactory.CreateRepository<Diagnosis>();
+
+            _patientRepo = patientRepo;
+            _diagnosisRepo = diagnosisRepo;
+
             _mapper = mapper;
         }
 
@@ -33,7 +39,7 @@ namespace PatientManager.Controllers
             return View(patientVms);
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Details(long id)
         {
             var patient = _patientRepo.Get(id);
             var patientVm = _mapper.Map<PatientVM>(patient);
@@ -41,27 +47,30 @@ namespace PatientManager.Controllers
             return View(patientVm);
         }
 
-        public ActionResult MedicalHistory(int id)
+        public ActionResult MedicalHistory(long id)
         {
             var patient = _patientRepo.Get(id);
 
             var medicalHistory = patient.MedicalHistory;
             ViewBag.PatientName = patient.FirstName + " " + patient.LastName;
+            ViewBag.PatientId = id;
 
             return View(medicalHistory);
         }
 
-        public ActionResult DiagnosisFinished(int id)
+        public ActionResult DiagnosisFinished(long id)
         {
             var diagnosis = _diagnosisRepo.Get(id);
             diagnosis.End = DateOnly.FromDateTime(DateTime.Now);
             _diagnosisRepo.Update(id, diagnosis);
 
-            return RedirectToAction(nameof(MedicalHistory), new { diagnosis.Patient.Id } );
+            return RedirectToAction(nameof(MedicalHistory), new { id = diagnosis.PatientId } );
         }
 
         public ActionResult Create()
         {
+            ViewBag.GenderListItems = ViewUtils.GetGenderListItems();
+
             var patient = new PatientVM();
             return View(patient);
         }
@@ -75,6 +84,7 @@ namespace PatientManager.Controllers
                 CheckOib(patientVm);
 
                 var patient = _mapper.Map<Patient>(patientVm);
+                patient.
                 _patientRepo.Add(patient);
 
                 return RedirectToAction(nameof(Index));
@@ -85,7 +95,7 @@ namespace PatientManager.Controllers
             }
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(long id)
         {
             var patient = _mapper.Map<PatientVM>(_patientRepo.Get(id));
             return View(patient);
@@ -93,7 +103,7 @@ namespace PatientManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, PatientVM patientVm)
+        public ActionResult Edit(long id, PatientVM patientVm)
         {
             try
             {
@@ -110,7 +120,7 @@ namespace PatientManager.Controllers
             }
         }
 
-        public ActionResult Delete(int id)
+        public ActionResult Delete(long id)
         {
             var patient = _mapper.Map<PatientVM>(_patientRepo.Get(id));
 
@@ -119,7 +129,7 @@ namespace PatientManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, PatientVM patient)
+        public ActionResult Delete(long id, PatientVM patient)
         {
             try
             {

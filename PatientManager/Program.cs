@@ -14,6 +14,9 @@ builder.Services.AddDbContext<PatientManagerContext>(options => {
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+builder.Services.AddScoped<IRepository<Patient>, PatientRepository>();
+builder.Services.AddScoped<IRepository<Diagnosis>, DiagnosisRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

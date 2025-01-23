@@ -11,11 +11,11 @@ namespace DataLayer.Models
 {
     public class PatientManagerContext : DbContext
     {
-        public DbSet<Patient>? Patients { get; set; }
-        public DbSet<Examination>? Examinations { get; set; }
-        public DbSet<ExaminationType>? ExaminationTypes { get; set; }
-        public DbSet<Diagnosis>? Diagnoses { get; set; }
-        public DbSet<Perescription>? Perescriptions { get; set; }
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Examination> Examinations { get; set; }
+        public DbSet<ExaminationType> ExaminationTypes { get; set; }
+        public DbSet<Diagnosis> Diagnoses { get; set; }
+        public DbSet<Perescription> Perescriptions { get; set; }
 
         // referenciraj appsettings
         private const string CONNECTION_STRING = @"
@@ -41,40 +41,32 @@ namespace DataLayer.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Examination>(entity =>
+            modelBuilder.Entity<ExaminationType>(entity =>
             {
-                entity.HasOne(e => e.Patient)
-                      .WithMany(p => p.Examinations);
+                entity.HasData(
+                    ExaminationType.GP,
+                    ExaminationType.KRV,
+                    ExaminationType.XRAY,
+                    ExaminationType.CT,
+                    ExaminationType.MR,
+                    ExaminationType.ULTRA,
+                    ExaminationType.ECG,
+                    ExaminationType.ECHO,
+                    ExaminationType.EYE,
+                    ExaminationType.DERM,
+                    ExaminationType.DENTA,
+                    ExaminationType.MAMMO,
+                    ExaminationType.NEURO
+                );
+            });
 
-                entity.HasOne(e => e.Type);
-            }); 
-
-            //modelBuilder.Entity<ExaminationType>(entity =>
-            //{
-            //    entity.HasData(
-            //        ExaminationType.GP,
-            //        ExaminationType.KRV,
-            //        ExaminationType.XRAY,
-            //        ExaminationType.CT,
-            //        ExaminationType.MR,
-            //        ExaminationType.ULTRA,
-            //        ExaminationType.ECG,
-            //        ExaminationType.ECHO,
-            //        ExaminationType.EYE,
-            //        ExaminationType.DERM,
-            //        ExaminationType.DENTA,
-            //        ExaminationType.MAMMO,
-            //        ExaminationType.NEURO
-            //    );
-            //});
-
-            //modelBuilder.Entity<Gender>(entity =>
-            //{
-            //    entity.HasData(
-            //        Gender.Male,
-            //        Gender.Female
-            //    );
-            //});
+            modelBuilder.Entity<Gender>(entity =>
+            {
+                entity.HasData(
+                    Gender.Male,
+                    Gender.Female
+                );
+            });
 
             base.OnModelCreating(modelBuilder);
         }

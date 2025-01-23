@@ -11,10 +11,16 @@ namespace PatientManager.Controllers
         private readonly IRepository<Diagnosis> _diagnosisRepo;
         private readonly IRepository<Patient> _patientRepo;
 
-        public DiagnosisController()
+        //public DiagnosisController()
+        //{
+        //    _diagnosisRepo = RepositoryFactory.CreateRepository<Diagnosis>();
+        //    _patientRepo = RepositoryFactory.CreateRepository<Patient>();
+        //}
+
+        public DiagnosisController(IRepository<Diagnosis> diagnosisRepo, IRepository<Patient> patientRepo)
         {
-            _diagnosisRepo = RepositoryFactory.CreateRepository<Diagnosis>();
-            _patientRepo = RepositoryFactory.CreateRepository<Patient>();
+            _diagnosisRepo = diagnosisRepo;
+            _patientRepo = patientRepo;
         }
 
         public ActionResult Details(int id)
@@ -37,10 +43,11 @@ namespace PatientManager.Controllers
         {
             try
             {
-                diagnosis.Patient = _patientRepo.Get(diagnosis.PatientId);
+                var patient = _patientRepo.Get(diagnosis.PatientId);
+                diagnosis.Id = 0;
                 _diagnosisRepo.Add(diagnosis);
 
-                return RedirectToAction("MedicalHistory", "Patient", new { diagnosis.Patient.Id });
+                return RedirectToAction("MedicalHistory", "Patient", new { id = diagnosis.PatientId });
             }
             catch
             {

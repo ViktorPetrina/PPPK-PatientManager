@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
-    internal class DiagnosisRepository : IRepository<Diagnosis>
+    public class DiagnosisRepository : IRepository<Diagnosis>
     {
         private const string NON_EXISTING_DIAGNOSIS_ERROR = "Diagnosis with provided id does not exist.";
 

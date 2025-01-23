@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Repository
 {
-    internal class PatientRepository : IRepository<Patient>
+    public class PatientRepository : IRepository<Patient>
     {
         private const string NON_EXISTING_PATIENT_ERROR = "The patient with provided id does not exist.";
 
