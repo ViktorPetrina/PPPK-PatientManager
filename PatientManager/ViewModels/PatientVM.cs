@@ -33,5 +33,7 @@ namespace PatientManager.ViewModels
         public IEnumerable<Examination>? Examinations { get; set; }
 
         public IEnumerable<Diagnosis>? MedicalHistory { get; set; }
+
+        public IEnumerable<Perescription>? Perescriptions { get; set; }
     }
 }

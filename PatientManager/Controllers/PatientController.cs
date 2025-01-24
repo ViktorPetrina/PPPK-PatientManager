@@ -86,6 +86,17 @@ namespace PatientManager.Controllers
             return View(examinatios);
         }
 
+        public ActionResult Perescriptions(long id)
+        {
+            var patient = _patientRepo.Get(id);
+
+            var perescriptions = patient.Perescriptions;
+            ViewBag.PatientName = patient.FirstName + " " + patient.LastName;
+            ViewBag.PatientId = id;
+
+            return View(perescriptions);
+        }
+
         public ActionResult MedicalHistory(long id)
         {
             var patient = _patientRepo.Get(id);

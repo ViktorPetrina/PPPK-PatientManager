@@ -17,6 +17,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IRepository<Patient>, PatientRepository>();
 builder.Services.AddScoped<IRepository<Examination>, ExaminationRepository>();
 builder.Services.AddScoped<IRepository<Diagnosis>, DiagnosisRepository>();
+builder.Services.AddScoped<IRepository<Perescription>, PerescriptionRepository>();
 
 var app = builder.Build();
 

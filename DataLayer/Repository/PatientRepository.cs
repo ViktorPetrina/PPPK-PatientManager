@@ -41,6 +41,7 @@ namespace DataLayer.Repository
             var patient = _context.Patients?
                 .Include(p => p.Sex)
                 .Include(p => p.MedicalHistory)
+                .Include(p => p.Perescriptions)
                 .Include(p => p.Examinations)
                 .ThenInclude(e => e.Type)
                 .FirstOrDefault(p => p.Id == id);

@@ -23,11 +23,6 @@ namespace PatientManager.Controllers
             _patientRepo = patientRepo;
         }
 
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         public ActionResult Create(int id)
         {
             var diagnosis = new Diagnosis();

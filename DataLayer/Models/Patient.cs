@@ -38,6 +38,8 @@ namespace DataLayer.Models
         public IEnumerable<Examination>? Examinations { get; set; }
 
         public List<Diagnosis>? MedicalHistory { get; set; }
+
+        public List<Perescription>? Perescriptions { get; set; }
     }
 
     public class Gender
