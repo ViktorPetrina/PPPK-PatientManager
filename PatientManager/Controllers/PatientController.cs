@@ -131,7 +131,12 @@ namespace PatientManager.Controllers
         {
             try
             {
-                CheckOib(patientVm);
+                if (_patientRepo.GetAll().Any(p => patientVm.Oib.Equals(p.Oib)))
+                {
+                    ModelState.AddModelError("", EXISTING_OIB_ERROR);
+                    ViewBag.GenderListItems = ViewUtils.GetGenderListItems();
+                    return View(patientVm);
+                }
 
                 var patient = _mapper.Map<Patient>(patientVm);
                 
@@ -157,7 +162,12 @@ namespace PatientManager.Controllers
         {
             try
             {
-                CheckOib(patientVm);
+                if (_patientRepo.GetAll().Any(p => patientVm.Oib.Equals(p.Oib)))
+                {
+                    ModelState.AddModelError("", EXISTING_OIB_ERROR);
+                    ViewBag.GenderListItems = ViewUtils.GetGenderListItems();
+                    return View(patientVm);
+                }
 
                 var patient = _mapper.Map<Patient>(patientVm);
                 _patientRepo.Update(id, patient);
@@ -191,16 +201,6 @@ namespace PatientManager.Controllers
             {
                 return View();
             }
-        }
-
-        private void CheckOib(PatientVM patient)
-        {
-            #pragma warning disable CS8602
-            if (_patientRepo.GetAll().Any(p => patient.Oib.Equals(p.Oib)))
-            {
-                ModelState.AddModelError(INVALID_OIB_ERROR_KEY, EXISTING_OIB_ERROR);
-            }
-            #pragma warning restore CS8602
         }
     }
 }
