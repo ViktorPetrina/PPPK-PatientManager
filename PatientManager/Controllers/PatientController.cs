@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PatientManager.Utilities;
 using PatientManager.ViewModels;
+using System.Text;
 
 // TODO:
 // popravi postojeci oib
@@ -32,11 +33,29 @@ namespace PatientManager.Controllers
             _mapper = mapper;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(SearchVM search)
         {
-            var patientVms = _mapper.Map<IEnumerable<PatientVM>>(_patientRepo.GetAll());
+            search.Patients = _mapper.Map<IEnumerable<PatientVM>>(_patientRepo.GetAll());
 
-            return View(patientVms);
+            if (!string.IsNullOrEmpty(search.Filter))
+            {
+                switch (search.OrderBy)
+                {
+                    case "lastName":
+                        search.Patients = search.Patients
+                            .Where(p => p.LastName.ToLower()
+                                .Contains(search.Filter.ToLower()));
+                        break;
+
+                    case "oib":
+                        search.Patients = search.Patients
+                            .Where(p => p.Oib.ToString()
+                                .Contains(search.Filter));
+                        break;
+                }
+            }
+
+            return View(search);
         }
 
         public ActionResult Details(long id)
@@ -45,6 +64,15 @@ namespace PatientManager.Controllers
             var patientVm = _mapper.Map<PatientVM>(patient);
 
             return View(patientVm);
+        }
+
+        public ActionResult ExportData(long id)
+        {
+            var content = ExportUtils.PatientToCsv(_patientRepo.Get(id));
+            byte[] byteArray = Encoding.UTF8.GetBytes(content);
+            MemoryStream stream = new MemoryStream(byteArray);
+
+            return File(stream, "application/octet-stream", "patient_data.csv");
         }
 
         public ActionResult Examinations(long id)

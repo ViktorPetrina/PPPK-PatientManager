@@ -20,5 +20,14 @@ namespace DataLayer.Models
 
         [Column("description")]
         public string? Description { get; set; }
+
+        [Column("start")]
+        public DateOnly Start { get; set; }
+
+        [ForeignKey("Patient")]
+        [Column("patient_id")]
+        public long PatientId { get; set; }
+
+        public Patient? Patient { get; set; }
     }
 }

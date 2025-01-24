@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PatientManager.ViewModels.PatientVM>
+﻿@model PatientManager.ViewModels.SearchVM
 
 @{
     ViewData["Title"] = "Index";
@@ -9,23 +9,50 @@
 <p>
     <a asp-action="Create" class="btn btn-primary">Add new patient</a>
 </p>
+
+<style>
+    .search-form {
+        max-width: 350px; 
+    }
+</style>
+
+<form asp-action="Index" method="GET">
+    <div class="row">
+        <div class="col-8 search-form">
+            <input asp-for="Filter" class="form-control search-form" placeholder="Search patient" />
+        </div>
+        <div class="col-auto">
+            <label class="form-label mt-1">Search by:</label>
+        </div>
+        <div class="col-auto">
+            <select asp-for="OrderBy" class="form-select">
+                <option value="lastName">Last name</option>
+                <option value="oib">Oib</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <input type="submit" value="Search" name="submit" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.Patients.First().FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.Patients.First().LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Oib)
+                @Html.DisplayNameFor(model => model.Patients.First().Oib)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Patients) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
