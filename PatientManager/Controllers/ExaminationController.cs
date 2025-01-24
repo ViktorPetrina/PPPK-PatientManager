@@ -31,8 +31,6 @@ namespace PatientManager.Controllers
         {
             var examination = _examinationRepo.Get(id);
 
-            // serialize the image and display somehow
-
             return View(examination);
         }
 
