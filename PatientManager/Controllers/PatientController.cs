@@ -8,9 +8,6 @@ using PatientManager.Utilities;
 using PatientManager.ViewModels;
 using System.Text;
 
-// TODO:
-// popravi postojeci oib
-
 namespace PatientManager.Controllers
 {
     public class PatientController : Controller
@@ -22,12 +19,9 @@ namespace PatientManager.Controllers
         private readonly IRepository<Diagnosis> _diagnosisRepo;
         private readonly IMapper _mapper;
 
-        public PatientController(IMapper mapper, IRepository<Patient> patientRepo, IRepository<Diagnosis> diagnosisRepo)
+        public PatientController(IMapper mapper, IRepository<Diagnosis> diagnosisRepo)
         {
-            //_patientRepo = RepositoryFactory.CreateRepository<Patient>();
-            //_diagnosisRepo = RepositoryFactory.CreateRepository<Diagnosis>();
-
-            _patientRepo = patientRepo;
+            _patientRepo = RepositoryFactory.CreateRepository<Patient>();
             _diagnosisRepo = diagnosisRepo;
 
             _mapper = mapper;
