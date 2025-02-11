@@ -1,11 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace DataLayer.Models
 {
@@ -17,26 +11,30 @@ namespace DataLayer.Models
         public DbSet<Diagnosis> Diagnoses { get; set; }
         public DbSet<Perescription> Perescriptions { get; set; }
 
-        // referenciraj appsettings
-        private const string CONNECTION_STRING = @"
-            Host=faultily-neat-amphibian.data-1.use1.tembo.io;
-            Port=5432;Username=postgres;
-            Password=mC1tqbpFh1kWLf9m;
-            Database=patient_manager;
-            Include Error Detail=true";
+        private readonly string connectionString;
 
         public PatientManagerContext()
         {
+            var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+            connectionString = configuration.GetConnectionString("connection");
         }
 
         public PatientManagerContext(DbContextOptions<PatientManagerContext> options)
             : base(options)
         {
+            var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+            connectionString = configuration.GetConnectionString("connection");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(CONNECTION_STRING);
+            optionsBuilder.UseNpgsql(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
